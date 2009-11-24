@@ -1,6 +1,6 @@
 ---
 name: CGI-Application-Plugin-CHI
-version: 0.02
+version: 0.03
 author:
   - 'Mike Friedman <friedo@friedo.com>'
 abstract: CGI-App plugin for CHI caching interface
@@ -18,7 +18,7 @@ configure_requires:
 provides:
   CGI::Application::Plugin::CHI:
     file: lib/CGI/Application/Plugin/CHI.pm
-    version: 0.02
+    version: 0.03
 generated_by: Module::Build version 0.35
 meta-spec:
   url: http://module-build.sourceforge.net/META-spec-v1.4.html

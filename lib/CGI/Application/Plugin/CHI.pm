@@ -9,7 +9,7 @@ use CHI;
 use Scalar::Util 'blessed', 'reftype';
 use Carp 'croak';
 
-our $VERSION = 0.02;
+our $VERSION = 0.03;
 
 # export by default since we're doing a mixin-style class
 our @EXPORT = ( 'cache_config', 'cache_default', 'cache', 'rmcache', '__get_cache' );
@@ -120,6 +120,7 @@ sub _clean_conf {
 
 
 __END__
+=encoding utf-8
 
 =head1 NAME
 
@@ -127,7 +128,7 @@ CGI::Application::Plugin::CHI - CGI-App plugin for CHI caching interface
 
 =head1 VERSION
 
-Version 0.02
+Version 0.03
 
 =head1 SYNOPSIS
 
@@ -163,7 +164,7 @@ This module exports the following methods into your L<CGI::Application> base cla
 This method sets up all your caches and stores their configurations for later retrieval. You can call C<cache_config>
 in two ways. The simple way sets up a default cache, and takes a single hashref which is passed directly to L<CHI>:
 
-  __PACKAGE__->cache_config( { driver => 'File', cache_root => '/path/to/nowhere' } )
+  __PACKAGE__->cache_config( { driver => 'File', root_dir => '/path/to/nowhere' } )
 
 Once it's set up, this default cache can be accessed from anywhere that can call the C<cache> or C<rmcache> methods. 
 (e.g. your web application class and any of its subclasses.)
