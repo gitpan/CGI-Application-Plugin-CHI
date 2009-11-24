@@ -7,7 +7,7 @@ use Test::More tests => 15;
 
 use_ok( 'CGI::Application::Plugin::CHI' );
 
-my %conf = ( driver    => 'Memory' );
+my %conf = ( driver    => 'Memory', global => 1 );
 
 main->cache_config( \%conf );
 
@@ -21,6 +21,7 @@ my $obj = bless { }, 'main';
 is( $obj->cache->get( 'foo' ), 'bar' );
 
 clean();
+delete $conf{global};
 
 my ( %flarg, %blarg );
 my $testc1 = CHI->new( %conf, datastore => \%flarg );

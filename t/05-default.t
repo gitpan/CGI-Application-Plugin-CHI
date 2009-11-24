@@ -7,7 +7,7 @@ use Test::More tests => 4;
 
 use_ok( 'CGI::Application::Plugin::CHI' );
 
-main->cache_config( foo => { driver => 'Memory' } );
+main->cache_config( foo => { driver => 'Memory', global => 1 } );
 
 my $obj = bless { }, 'main';
 

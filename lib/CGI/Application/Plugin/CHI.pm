@@ -9,10 +9,10 @@ use CHI;
 use Scalar::Util 'blessed', 'reftype';
 use Carp 'croak';
 
-our $VERSION = 0.01;
+our $VERSION = 0.02;
 
 # export by default since we're doing a mixin-style class
-our @EXPORT = ( 'cache_config', 'cache_default', 'cache', 'rmcache' );
+our @EXPORT = ( 'cache_config', 'cache_default', 'cache', 'rmcache', '__get_cache' );
 
 
 my %CONFIG;
@@ -62,7 +62,7 @@ sub cache {
     croak 'too many arguments to cache()'
       if @_ > 1;
 
-    return $self->CGI::Application::Plugin::CHI::_get_cache( [ @_ ] );
+    return $self->__get_cache( [ @_ ] );
 }
 
 sub rmcache { 
@@ -73,11 +73,11 @@ sub rmcache {
 
     my $ns = blessed( $self ) . '::' . $self->get_current_runmode;
 
-    return $self->CGI::Application::Plugin::CHI::_get_cache( [ @_ ], $ns );
+    return $self->__get_cache( [ @_ ], $ns );
 }
 
 
-sub _get_cache { 
+sub __get_cache { 
     my $self = shift;
 
     my @args = @{ $_[0] };
@@ -127,7 +127,7 @@ CGI::Application::Plugin::CHI - CGI-App plugin for CHI caching interface
 
 =head1 VERSION
 
-Version 0.01
+Version 0.02
 
 =head1 SYNOPSIS
 
@@ -140,7 +140,7 @@ Version 0.01
   
   use CGI::Application::Plugin::CHI;
   
-  __PACKAGE__->cache_config( { driver => 'File', cache_root => '/path/to/nowhere' } );
+  __PACKAGE__->cache_config( { driver => 'File', root_dir => '/path/to/nowhere' } );
   
   ...
   
@@ -154,8 +154,7 @@ Version 0.01
 
 =head1 EXPORT
 
-This module exports the following methods into your L<CGI::Application> base class: C<cache_config>, C<cache_default>, 
-C<cache>, and C<rmcache>
+This module exports the following methods into your L<CGI::Application> base class: C<cache_config>, C<cache_default>, C<cache>, C<rmcache> and C<__get_cache>. 
 
 =head1 CLASS METHODS
 
@@ -171,9 +170,9 @@ Once it's set up, this default cache can be accessed from anywhere that can call
 
 Alternatively, you can pass in a list of name => hashref pairs to set up several caches with different names.
 
-  __PACKAGE__->cache_config( ondisk       => { driver => 'File', cache_root => '/path/to/nowhere' },
-                             inram        => { driver => 'Memory' },
-                             distributed  => { driver => 'Memcached' } );
+  __PACKAGE__->cache_config( ondisk       => { driver => 'File', root_dir => '/path/to/nowhere' },
+                             inram        => { driver => 'Memory', datastore => \%hash },
+                             distributed  => { driver => 'Memcached', ... } );
 
 You can call C<cache_config> multiple times to add or overwrite additional cache configurations.
 
@@ -218,9 +217,18 @@ Just like C<cache>, you can call C<rmcache> with zero arguments to get the defau
 
 Note that if you set a namespace when you called C<cache_config>, using C<rmcache> will override it.
 
+=head2 __get_cache
+
+This method is used internally by C<cache> and C<rmcache> to fetch and instantiate the proper cache
+object. It will be exported to your application, but you should not call it directly. 
+
 =head1 AUTHOR
 
 Mike Friedman, C<< <friedo at friedo.com> >>
+
+=head1 THANKS
+
+Thanks to 黄叶 for pointing out some documentation bugs, and Jonathan Swartz, Perrin Harkins and the rest of the CHI team. 
 
 =head1 BUGS
 

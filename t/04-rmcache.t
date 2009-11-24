@@ -7,7 +7,7 @@ use Test::More tests => 7;
 
 use_ok( 'CGI::Application::Plugin::CHI' );
 
-main->cache_config( { driver    => 'Memory' } );
+main->cache_config( { driver    => 'Memory', global => 1 } );
 
 my $rm = "foo_runmode";
 sub get_current_runmode { $rm }
